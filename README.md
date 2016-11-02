@@ -1,1 +1,1 @@
-виджеты для движка HGE
+widgets on HGE engine
