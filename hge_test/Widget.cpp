@@ -11,8 +11,11 @@ Widget::Widget(float _x,
 		   BOOL visibl): posX(_x), posY(_y), width(_width), height(_height), id_s(_id), order(_order), visible(visibl)
 
 {
+	statcreat ++;
+	idcreate = statcreat;
 	mouse_entered = false; 
 	sprBtn= new hgeSprite(NULL, 0,0,_width, _height);
+	renderVect.push_back(this);
 }
 bool Widget::MouseInBox()
 {
@@ -41,6 +44,14 @@ std::string  Widget::GetId()
 void Widget::SetOrder(int order_)
 {
 	order = order_;
+}
+int Widget::GetOrder()
+{
+	return order;
+}
+int Widget::GetCreateID()
+{
+	return idcreate;
 }
 WidgetContainer* Widget::GetWidgetContainer()
 {
@@ -100,64 +111,4 @@ void Widget::Show()
 void Widget::Hide()
 {
 	visible = false;
-}
-
-
-
-WidgetContainer::WidgetContainer(void)
-{
-}
-void WidgetContainer::Show(bool _visibl)
-{
-	visibl = _visibl;
-}
-bool WidgetContainer::isVisible()
-{
-	return visibl;
-}
-void WidgetContainer::Update(float df)
-{
-	for (auto i = widgetsMap.begin(); i!=widgetsMap.end();i++)
-		i->second->Update(0);
-
-}
-void WidgetContainer::Render()
-{
-	//std::map<int,Widget*> new_map_order;
-	for (auto i = widgetsMap.begin(); i!=widgetsMap.end();i++)
-		i->second->Render();
-	for (auto i = widgetsContMap.begin(); i!=widgetsContMap.end();i++)
-		i->second->Render();
-
-}
-void WidgetContainer::addWidget(Widget *v, WidgetContainer* pWc)
-{
-	v->SetWidgetContainer( pWc);
-	widgetsMap[v->GetId()] = v;
-}
-void WidgetContainer::addWidgetCont(std::string id, WidgetContainer* pWc)
-{
-	widgetsContMap[id] = pWc;
-}
-
-Widget* WidgetContainer::GetWidget(std::string id)
-{
-	auto i = widgetsMap.find(id);
-	if(i!=widgetsMap.end())
-		return widgetsMap[id];
-	else
-		return NULL;
-}
-WidgetContainer* WidgetContainer::GetWidgetContainer(std::string id) 
-{
-	auto i = widgetsContMap.find(id);
-	if(i!=widgetsContMap.end())
-		return widgetsContMap[id];
-	else
-		return NULL;
-}
-WidgetContainer::~WidgetContainer(void)
-{
-	for(auto i = widgetsContMap.begin();i!= widgetsContMap.end(); i++)
-		delete i->second;
 }

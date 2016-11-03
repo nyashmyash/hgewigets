@@ -18,6 +18,7 @@ WidgetBtn::WidgetBtn(float _x,
 WidgetBtn::WidgetBtn(void)
 {
 }
+//msg to button with event mouse click
 bool WidgetBtn::MouseLButton(bool bDown)
 {
 	if(visible && GetWidgetContainer()->isVisible())
@@ -48,7 +49,7 @@ bool WidgetBtn::MouseLButton(bool bDown)
 	return true;
 }
 
-
+//delete textures
 WidgetBtn::~WidgetBtn(void)
 {
 	hge->Texture_Free(pushTex);

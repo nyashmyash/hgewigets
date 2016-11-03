@@ -6,20 +6,23 @@
 #include <hgegui.h>
 #include <memory>
 #include <string>
-//#include "WidgetContainer.h"
 
 #define MSG_BTNCLICK 1
 #define MSG_MOUSEENTER 2
 #define MSG_MOUSELEAVE 3
 
+static int statcreat = 0;
+
 class WidgetContainer;
 
 class Widget
 {
+
 protected:
 	float posX, posY, width, height;
 	std::string id_s;
 	int order;
+	int idcreate;
 	hgeSprite*	sprBtn;
 	int type;
 	BOOL visible;
@@ -41,7 +44,8 @@ public:
 	void SetId(const std::string & id_); // установить строковый идентификатор 
 	std::string GetId();
 	void SetOrder(int order_); // для изменения порядка отрисовки виджетов на экране (аппаратный z-order не используется)
-
+	int GetOrder();
+	int GetCreateID();
 	void SetPos(float x, float y); // положение виджета
 	void SetSize(float w, float h); // размер виджета. Предполагается что все виджеты – прямоугольники
 	bool MouseInBox();
@@ -56,24 +60,4 @@ public:
 	void AddEventHandler(int hdr,std::function<void(Widget *)> func); // регистрация фунций обратного вызова для различных союбытий виджета. 
 	
 
-};
-
-class WidgetContainer
-{
-private:
-	bool visibl;
-	//std::string id;
-	std::map<std::string,Widget*> widgetsMap;
-	std::map<std::string,WidgetContainer*> widgetsContMap;
-public:
-	void addWidget(Widget *v, WidgetContainer* pWc);
-	void addWidgetCont(std::string id, WidgetContainer* pWc);
-	Widget* GetWidget(std::string id);
-	WidgetContainer* GetWidgetContainer(std::string id);
-	void Show(bool visibl);
-	bool isVisible();
-	void Update(float fd);
-	void Render();
-	WidgetContainer(void);
-	~WidgetContainer(void);
 };

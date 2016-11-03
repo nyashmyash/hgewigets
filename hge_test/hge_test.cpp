@@ -4,9 +4,7 @@
 #include "stdafx.h"
 #include "hge_test.h"
 
-#include "Widget.h"
-#include "WidgetBtn.h"
-#include "WidgetImg.h"
+
 #include <string>
 
 using namespace std;
@@ -20,19 +18,18 @@ using namespace std;
 
 // Pointers to the HGE objects we will use
 HGE *hge = NULL;
+//
 float mx, my;
 bool mouse_down = false;
 hgeSprite*		sprcurs;
-//hgeSprite*			spt;
-hgeFont		*	fnt;
 
 HTEXTURE			curs;
 hgeQuad				quad;
-WidgetContainer* wcont;      
-// Some "gameplay" variables
-//float x=100.0f, y=100.0f, s=0.01;
+WidgetContainer* wcont;   
+std::vector<Widget*> renderVect;
 
 int push = 0;
+//main function for update elements
 bool FrameFunc()
 {
 	if (hge->Input_GetKeyState(HGEK_ESCAPE)) return true;
@@ -61,12 +58,11 @@ bool RenderFunc()
 	hge->Gfx_RenderQuad(&quad);
 	wcont->Render();
 	if(hge->Input_IsMouseOver() && sprcurs) sprcurs->Render(mx,my);
-	fnt->SetColor(0x1111FFFF);
-	fnt->printf(5, 5, HGETEXT_LEFT, "dt:%.3f\nFPS:%d", hge->Timer_GetDelta(), hge->Timer_GetFPS());
 	hge->Gfx_EndScene();
 
 	return false;
 }
+//callback functions
 void OnMouseEnter(Widget * widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Show();
@@ -79,6 +75,16 @@ void OnMouseClick(Widget * widget)
 {
 WidgetContainer* container = widget->GetWidgetContainer()->GetWidgetContainer("container2");
 container->Show(!container->isVisible());
+}
+bool sortfunc(Widget *i,Widget *j) 
+{ 
+	if (i->GetOrder()<j->GetOrder())
+		return true;
+	else
+		if (i->GetOrder()==j->GetOrder()&& i->GetCreateID()<j->GetCreateID())
+			return true;
+		else
+			return false;
 }
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
@@ -128,24 +134,24 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		
 		wcont = new WidgetContainer();
 				
-		WidgetBtn* btn = new WidgetBtn(100.,100.,140.,24.,"btn1",1,TRUE,btnpushtex, btnpoptex);
+		WidgetBtn* btn = new WidgetBtn(100.,100.,140.,24.,"btn1",3,TRUE,btnpushtex, btnpoptex);
 		btn->AddEventHandler(MSG_BTNCLICK, OnMouseClick);
-		wcont->addWidget(btn, wcont); 
+		wcont->addWidget(btn); 
 
 		str = path + std::string("\\img1.png");
 		HTEXTURE teximg1=hge->Texture_Load(str.c_str());
-		WidgetImg *img = new WidgetImg(100.,200.,201.,126.,"img1",2,TRUE,teximg1);
+		WidgetImg *img = new WidgetImg(100.,200.,201.,126.,"img1",3,TRUE,teximg1);
 		img->AddEventHandler(MSG_MOUSEENTER, OnMouseEnter);
 		img->AddEventHandler(MSG_MOUSELEAVE, OnMouseLeave);
-		wcont->addWidget(img, wcont);
+		wcont->addWidget(img);
 
 		str = path + std::string("\\img2.png");
 		HTEXTURE teximg2=hge->Texture_Load(str.c_str());
-		wcont->addWidget(new WidgetImg(100.,200.,201.,126.,"img2",3,FALSE,teximg2), wcont);
+		wcont->addWidget(new WidgetImg(100.,200.,201.,126.,"img2",1,FALSE,teximg2));
 		wcont->Show(true);
 		WidgetContainer* wcont2 = new WidgetContainer();
-		wcont2->addWidget(new WidgetBtn(350.,100.,140.,24.,"btnz",4,TRUE,btnpushtex, btnpoptex),wcont2);
-		wcont2->addWidget(new WidgetImg(350.,200.,201.,126.,"imgz1",5,TRUE,teximg1), wcont2);
+		wcont2->addWidget(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,btnpushtex, btnpoptex));
+		wcont2->addWidget(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,teximg1));
 		wcont2->Show(false);
 		wcont->addWidgetCont("container2", wcont2);
 
@@ -153,12 +159,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		curs=hge->Texture_Load(str.c_str());
 	
 		sprcurs= new hgeSprite(curs,0,0,32,32);
+	
+		//sort render vector
+		std::sort(renderVect.begin(), renderVect.end(),sortfunc);
 
-		str = path +std::string("\\font1.fnt"); 
-		// Load a font
-		fnt= new hgeFont(str.c_str());
-		
-		// Let's rock now!
 		hge->System_Start();
 
 		// Delete created objects and free loaded resources
@@ -166,7 +170,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		hge->Texture_Free(curs);
 		hge->Texture_Free(quad.tex);
 		delete sprcurs;
-		delete fnt;
 		delete wcont;
 	}
 	hge->System_Shutdown();

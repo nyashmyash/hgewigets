@@ -1,7 +1,5 @@
 #include "stdafx.h"
-/*#include "WidgetContainer.h"
-
-
+#include "WidgetContainer.h"
 WidgetContainer::WidgetContainer(void)
 {
 }
@@ -13,21 +11,52 @@ bool WidgetContainer::isVisible()
 {
 	return visibl;
 }
-void WidgetContainer::addWidget(Widget &v, WidgetContainer *pWc)
+void WidgetContainer::Update(float df)
 {
-	v.SetWidgetContainer(pWc);
-	widgetsMap[v.GetId()] = v;
+	for (auto i = widgetsMap.begin(); i!=widgetsMap.end();i++)
+		i->second->Update(0);
+	for (auto i = widgetsContMap.begin(); i!=widgetsContMap.end();i++)
+		i->second->Update(0);
+
 }
-Widget * WidgetContainer::GetWidget(std::string id)
+void WidgetContainer::Render()
 {
-	return &widgetsMap[id];	
+	for(int i =0;i< renderVect.size();i++)
+		renderVect[i]->Render();
+	/*for (auto i = widgetsMap.begin(); i!=widgetsMap.end();i++)
+		i->second->Render();
+	for (auto i = widgetsContMap.begin(); i!=widgetsContMap.end();i++)
+		i->second->Render();
+		*/
 }
-WidgetContainer * WidgetContainer::GetWidgetContainer(std::string id) 
+void WidgetContainer::addWidget(Widget *v)
 {
-	return &widgetsContMap[id];
+	v->SetWidgetContainer( this);
+	widgetsMap[v->GetId()] = v;
+}
+void WidgetContainer::addWidgetCont(std::string id, WidgetContainer* pWc)
+{
+	widgetsContMap[id] = pWc;
+}
+
+Widget* WidgetContainer::GetWidget(std::string id)
+{
+	auto i = widgetsMap.find(id);
+	if(i!=widgetsMap.end())
+		return widgetsMap[id];
+	else
+		return NULL;
+}
+WidgetContainer* WidgetContainer::GetWidgetContainer(std::string id) 
+{
+	auto i = widgetsContMap.find(id);
+	if(i!=widgetsContMap.end())
+		return widgetsContMap[id];
+	else
+		return NULL;
 }
 WidgetContainer::~WidgetContainer(void)
 {
-
+	for(auto i = widgetsContMap.begin();i!= widgetsContMap.end(); i++)
+		delete i->second;
 }
-*/
