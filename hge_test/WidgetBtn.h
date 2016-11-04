@@ -12,7 +12,7 @@ public:
 		   float _height, 
 		   std::string _id, 
 		   int _order, 
-		   BOOL visibl,
+		   bool visibl,
 		   HTEXTURE _pushTex,
 		   HTEXTURE _popTex);
 	WidgetBtn(void);

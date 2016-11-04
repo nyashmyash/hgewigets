@@ -25,8 +25,8 @@ hgeSprite*		sprcurs;
 
 HTEXTURE			curs;
 hgeQuad				quad;
-WidgetContainer* wcont;   
-std::vector<Widget*> renderVect;
+shared_ptr<WidgetContainer> wcont;   
+std::vector<Widget* > renderVect;
 
 int push = 0;
 //main function for update elements
@@ -63,20 +63,20 @@ bool RenderFunc()
 	return false;
 }
 //callback functions
-void OnMouseEnter(Widget * widget)
+void OnMouseEnter(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Show();
 }
-void OnMouseLeave(Widget * widget)
+void OnMouseLeave(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Hide();
 }
-void OnMouseClick(Widget * widget)
+void OnMouseClick(Widget*  widget)
 {
 WidgetContainer* container = widget->GetWidgetContainer()->GetWidgetContainer("container2");
-container->Show(!container->isVisible());
+container->Show(!container->IsVisible());
 }
-bool sortfunc(Widget *i,Widget *j) 
+bool sortfunc(Widget* i,Widget* j) 
 { 
 	if (i->GetOrder()<j->GetOrder())
 		return true;
@@ -132,28 +132,28 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		str = path + std::string("\\btnpush.png");
 		HTEXTURE btnpushtex=hge->Texture_Load(str.c_str());
 		
-		wcont = new WidgetContainer();
+		wcont = make_shared<WidgetContainer> (WidgetContainer());
 				
-		WidgetBtn* btn = new WidgetBtn(100.,100.,140.,24.,"btn1",3,TRUE,btnpushtex, btnpoptex);
+		WidgetBtn* btn = new WidgetBtn(100.,100.,140.,24.,"btn1",7,TRUE,btnpushtex, btnpoptex);
 		btn->AddEventHandler(MSG_BTNCLICK, OnMouseClick);
-		wcont->addWidget(btn); 
+		wcont->AddWidget(btn); 
 
 		str = path + std::string("\\img1.png");
 		HTEXTURE teximg1=hge->Texture_Load(str.c_str());
-		WidgetImg *img = new WidgetImg(100.,200.,201.,126.,"img1",3,TRUE,teximg1);
+		WidgetImg *img = new WidgetImg(100.,200.,201.,126.,"img1",1,TRUE,teximg1);
 		img->AddEventHandler(MSG_MOUSEENTER, OnMouseEnter);
 		img->AddEventHandler(MSG_MOUSELEAVE, OnMouseLeave);
-		wcont->addWidget(img);
+		wcont->AddWidget(img);
 
 		str = path + std::string("\\img2.png");
 		HTEXTURE teximg2=hge->Texture_Load(str.c_str());
-		wcont->addWidget(new WidgetImg(100.,200.,201.,126.,"img2",1,FALSE,teximg2));
+		wcont->AddWidget(new WidgetImg(100.,200.,201.,126.,"img2",5,FALSE,teximg2));
 		wcont->Show(true);
 		WidgetContainer* wcont2 = new WidgetContainer();
-		wcont2->addWidget(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,btnpushtex, btnpoptex));
-		wcont2->addWidget(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,teximg1));
+		wcont2->AddWidget(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,btnpushtex, btnpoptex));
+		wcont2->AddWidget(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,teximg1));
 		wcont2->Show(false);
-		wcont->addWidgetCont("container2", wcont2);
+		wcont->AddWidgetCont("container2", wcont2);
 
 		str = path + std::string("\\cursor.png");
 		curs=hge->Texture_Load(str.c_str());
@@ -170,7 +170,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		hge->Texture_Free(curs);
 		hge->Texture_Free(quad.tex);
 		delete sprcurs;
-		delete wcont;
+		//delete wcont;
 	}
 	hge->System_Shutdown();
 	hge->Release();

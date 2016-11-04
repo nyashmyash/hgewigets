@@ -7,7 +7,7 @@ void WidgetContainer::Show(bool _visibl)
 {
 	visibl = _visibl;
 }
-bool WidgetContainer::isVisible()
+bool WidgetContainer::IsVisible()
 {
 	return visibl;
 }
@@ -29,17 +29,17 @@ void WidgetContainer::Render()
 		i->second->Render();
 		*/
 }
-void WidgetContainer::addWidget(Widget *v)
+void WidgetContainer::AddWidget(Widget* v)
 {
 	v->SetWidgetContainer( this);
 	widgetsMap[v->GetId()] = v;
 }
-void WidgetContainer::addWidgetCont(std::string id, WidgetContainer* pWc)
+void WidgetContainer::AddWidgetCont(std::string id, WidgetContainer* pWc)
 {
 	widgetsContMap[id] = pWc;
 }
 
-Widget* WidgetContainer::GetWidget(std::string id)
+Widget*  WidgetContainer::GetWidget(std::string id)
 {
 	auto i = widgetsMap.find(id);
 	if(i!=widgetsMap.end())

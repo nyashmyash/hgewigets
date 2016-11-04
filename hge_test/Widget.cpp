@@ -8,46 +8,57 @@ Widget::Widget(float _x,
 		   float _height, 
 		   std::string _id, 
 		   int _order, 
-		   BOOL visibl): posX(_x), posY(_y), width(_width), height(_height), id_s(_id), order(_order), visible(visibl)
+		   bool visibl): posX(_x), posY(_y), width(_width), height(_height), id_s(_id), order(_order), visible(visibl)
 
 {
 	statcreat ++;
 	idcreate = statcreat;
 	mouse_entered = false; 
-	sprBtn= new hgeSprite(NULL, 0,0,_width, _height);
+	pSprBtn	= new hgeSprite(NULL, 0,0,_width, _height);
 	renderVect.push_back(this);
 }
 bool Widget::MouseInBox()
 {
-	if (mx>posX && my>posY && mx<posX+sprBtn->GetWidth() && my<posY+sprBtn->GetHeight())
+	if (mx>posX && my>posY && mx<posX+pSprBtn->GetWidth() && my<posY+pSprBtn->GetHeight())
 	{return true;}
 	else
 	{return false;}		
 }
-
+std::map<int,std::function<void(Widget* )>> * Widget::GetEvents()
+{
+	return &events;
+}
 Widget::~Widget(void)
 {
 	
 }
-void Widget::SetWidgetContainer(WidgetContainer* w)
+void Widget::SetWidgetContainer(WidgetContainer* pwCont)
 {
-   pWidgetCont = w;
+   pWidgetCont = pwCont;
 }
-void Widget::SetId(const std::string & id_)
+void Widget::SetId(const std::string & sId)
 {
-	id_s = id_;
+	id_s = sId;
 }
 std::string  Widget::GetId()
 {
 	return id_s;
 }
-void Widget::SetOrder(int order_)
+void Widget::SetOrder(int iOrder)
 {
-	order = order_;
+	order = iOrder;
+}
+hgeSprite * Widget::GetSprite()
+{
+	return pSprBtn;
 }
 int Widget::GetOrder()
 {
 	return order;
+}
+bool Widget::IsVisible()
+{
+	return (bool) visible;
 }
 int Widget::GetCreateID()
 {
@@ -57,23 +68,23 @@ WidgetContainer* Widget::GetWidgetContainer()
 {
    return pWidgetCont;
 }
-void Widget::SetPos(float x, float y)
+void Widget::SetPos(float fX, float fY)
 {
-	posX = x;
-	posY = y;
+	posX = fX;
+	posY = fY;
 }
 
-void Widget::SetSize(float w, float h)
+void Widget::SetSize(float fWidth, float fHeight)
 {
-	width = w;
-	height = h;
+	width = fWidth;
+	height = fHeight;
 }
 
 bool Widget::MouseLButton(bool bDown)
 {
 	return true;
 }
-void Widget::AddEventHandler(int id_hdr,std::function<void(Widget *)> func)
+void Widget::AddEventHandler(int id_hdr,std::function<void(Widget* )> func)
 {
 	events[id_hdr]=func;
 }
@@ -101,8 +112,8 @@ void Widget::Update(float dt)
 
 void Widget::Render(void)
 {
-	if (visible && pWidgetCont->isVisible())
-		sprBtn->Render(posX,posY);
+	if (visible && pWidgetCont->IsVisible())
+		GetSprite()->Render(posX,posY);
 }
 void Widget::Show()
 {

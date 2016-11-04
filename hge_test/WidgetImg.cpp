@@ -8,10 +8,10 @@ WidgetImg::WidgetImg(float _x,
 		   float _height, 
 		   std::string _id, 
 		   int _order, 
-		   BOOL visibl,
+		   bool visibl,
 		   HTEXTURE _imgTex): Widget(_x,_y,_width,_height,_id,_order,visibl), imgTex(_imgTex)
 {
-	sprBtn->SetTexture(_imgTex);
+	GetSprite()->SetTexture(_imgTex);
 }
 
 WidgetImg::WidgetImg(void)
@@ -22,5 +22,5 @@ WidgetImg::WidgetImg(void)
 WidgetImg::~WidgetImg(void)
 {
 	hge->Texture_Free(imgTex);
-	delete sprBtn;
+	delete GetSprite();
 }

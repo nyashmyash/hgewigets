@@ -16,4 +16,4 @@
 extern HGE *hge;
 extern float mx, my;
 extern bool mouse_down;
-extern std::vector<Widget*> renderVect;
+extern std::vector<Widget* > renderVect;

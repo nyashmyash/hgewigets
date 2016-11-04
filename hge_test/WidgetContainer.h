@@ -5,16 +5,15 @@ class WidgetContainer
 {
 private:
 	bool visibl;
-	//std::string id;
-	std::map<std::string,Widget*> widgetsMap;
-	std::map<std::string,WidgetContainer*> widgetsContMap;
+	std::map<std::string,Widget* > widgetsMap; //элементы в контейнеры
+	std::map<std::string,WidgetContainer*> widgetsContMap; //список других контейнеров 
 public:
-	void addWidget(Widget *v);
-	void addWidgetCont(std::string id, WidgetContainer* pWc);
-	Widget* GetWidget(std::string id);
+	void AddWidget(Widget* v);
+	void AddWidgetCont(std::string id, WidgetContainer* pWc);
+	Widget*  GetWidget(std::string id);
 	WidgetContainer* GetWidgetContainer(std::string id);
 	void Show(bool visibl);
-	bool isVisible();
+	bool IsVisible();
 	void Update(float fd);
 	void Render();
 	WidgetContainer(void);

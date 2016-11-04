@@ -2,18 +2,18 @@
 #include "WidgetBtn.h"
 #include "hge_test.h"
 
-WidgetBtn::WidgetBtn(float _x, 
-		   float _y, 
-		   float _width, 
-		   float _height, 
-		   std::string _id, 
-		   int _order, 
-		   BOOL visibl,
-		   HTEXTURE _pushTex,
-		   HTEXTURE _popTex): Widget(_x,_y,_width,_height,_id,_order,visibl), pushTex(_pushTex), popTex(_popTex)
+WidgetBtn::WidgetBtn(float _fX, 
+		   float _fY, 
+		   float _fWidth, 
+		   float _fHeight, 
+		   std::string _sId, 
+		   int _iOrder, 
+		   bool _bVisibl,
+		   HTEXTURE _hPushTex,
+		   HTEXTURE _hPopTex): Widget(_fX,_fY,_fWidth,_fHeight,_sId,_iOrder,_bVisibl), pushTex(_hPushTex), popTex(_hPopTex)
 { 
 	click = 0;
-	sprBtn->SetTexture(popTex);
+	GetSprite()->SetTexture(popTex);
 }
 WidgetBtn::WidgetBtn(void)
 {
@@ -21,25 +21,25 @@ WidgetBtn::WidgetBtn(void)
 //msg to button with event mouse click
 bool WidgetBtn::MouseLButton(bool bDown)
 {
-	if(visible && GetWidgetContainer()->isVisible())
+	if(IsVisible() && GetWidgetContainer()->IsVisible())
 	{
 		if (bDown)
 		{
 			if(MouseInBox())
 			{
 				click = 1;
-				sprBtn->SetTexture(pushTex);
+				GetSprite()->SetTexture(pushTex);
 			}
 			else
-				sprBtn->SetTexture(popTex);	
+				GetSprite()->SetTexture(popTex);	
 		}
 		else
 		{
 			if(MouseInBox())
 			{
-				sprBtn->SetTexture(popTex);	
-				if (click &&events.find(MSG_BTNCLICK)!=events.end())
-					events[MSG_BTNCLICK](this);
+				GetSprite()->SetTexture(popTex);	
+				if (click &&GetEvents()->find(MSG_BTNCLICK)!=GetEvents()->end())
+					(*GetEvents())[MSG_BTNCLICK](this);
 				click = 0;
 			}
 		}
@@ -54,5 +54,5 @@ WidgetBtn::~WidgetBtn(void)
 {
 	hge->Texture_Free(pushTex);
 	hge->Texture_Free(popTex);
-	delete sprBtn;
+	delete GetSprite();
 }
