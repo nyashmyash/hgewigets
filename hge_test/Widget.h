@@ -23,12 +23,13 @@ private:
 	std::string id_s;
 	int order;
 	int idcreate;
-	hgeSprite*	pSprBtn;
+	std::shared_ptr<hgeSprite>	pSprBtn;
 	int type;
 	bool visible;
 	bool mouse_entered;
 	std::map<int,std::function<void(Widget* )>> events;
 	WidgetContainer* pWidgetCont;
+	
 public:
 	Widget(float _x, 
 		   float _y, 
@@ -56,7 +57,7 @@ public:
 	virtual void Update(float dt); // обновление состояни виджета
 	virtual void Render(void); // отрисовка виджета
 	WidgetContainer* GetWidgetContainer();
-	hgeSprite * GetSprite();
+	std::shared_ptr<hgeSprite> GetSprite();
 	void SetWidgetContainer(WidgetContainer* w);
 	void Show(); // показать виджет
 	void Hide(); // скрыть виджет

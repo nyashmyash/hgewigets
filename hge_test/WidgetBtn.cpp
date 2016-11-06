@@ -52,7 +52,5 @@ bool WidgetBtn::MouseLButton(bool bDown)
 //delete textures
 WidgetBtn::~WidgetBtn(void)
 {
-	hge->Texture_Free(pushTex);
-	hge->Texture_Free(popTex);
-	delete GetSprite();
+
 }

@@ -21,6 +21,5 @@ WidgetImg::WidgetImg(void)
 
 WidgetImg::~WidgetImg(void)
 {
-	hge->Texture_Free(imgTex);
-	delete GetSprite();
+	
 }

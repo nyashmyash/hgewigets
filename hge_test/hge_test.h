@@ -13,7 +13,8 @@
 #include <algorithm>    // std::sort
 
 // Global Variables:
-extern HGE *hge;
+extern HGE* hge;
 extern float mx, my;
 extern bool mouse_down;
-extern std::vector<Widget* > renderVect;
+//extern std::vector<Widget*> renderVect;
+extern std::vector<std::shared_ptr<Widget>> renderVect;

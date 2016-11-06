@@ -14,8 +14,7 @@ Widget::Widget(float _x,
 	statcreat ++;
 	idcreate = statcreat;
 	mouse_entered = false; 
-	pSprBtn	= new hgeSprite(NULL, 0,0,_width, _height);
-	renderVect.push_back(this);
+	pSprBtn	= std::shared_ptr<hgeSprite>( new hgeSprite(NULL, 0,0,_width, _height));
 }
 bool Widget::MouseInBox()
 {
@@ -24,7 +23,7 @@ bool Widget::MouseInBox()
 	else
 	{return false;}		
 }
-std::map<int,std::function<void(Widget* )>> * Widget::GetEvents()
+std::map<int,std::function<void(Widget *)>> * Widget::GetEvents()
 {
 	return &events;
 }
@@ -48,7 +47,7 @@ void Widget::SetOrder(int iOrder)
 {
 	order = iOrder;
 }
-hgeSprite * Widget::GetSprite()
+std::shared_ptr<hgeSprite>Widget::GetSprite()
 {
 	return pSprBtn;
 }
@@ -84,7 +83,7 @@ bool Widget::MouseLButton(bool bDown)
 {
 	return true;
 }
-void Widget::AddEventHandler(int id_hdr,std::function<void(Widget* )> func)
+void Widget::AddEventHandler(int id_hdr,std::function<void(Widget *)> func)
 {
 	events[id_hdr]=func;
 }

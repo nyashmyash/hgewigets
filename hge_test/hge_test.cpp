@@ -17,16 +17,17 @@ using namespace std;
 
 
 // Pointers to the HGE objects we will use
-HGE *hge = NULL;
+HGE *hge;
 //
 float mx, my;
 bool mouse_down = false;
-hgeSprite*		sprcurs;
+std::shared_ptr<hgeSprite>		sprcurs;
 
 HTEXTURE			curs;
 hgeQuad				quad;
 shared_ptr<WidgetContainer> wcont;   
-std::vector<Widget* > renderVect;
+//std::vector<Widget*> renderVect;
+std::vector<shared_ptr<Widget>> renderVect;
 
 int push = 0;
 //main function for update elements
@@ -73,10 +74,10 @@ void OnMouseLeave(Widget*  widget)
 }
 void OnMouseClick(Widget*  widget)
 {
-WidgetContainer* container = widget->GetWidgetContainer()->GetWidgetContainer("container2");
+std::shared_ptr<WidgetContainer> container = widget->GetWidgetContainer()->GetWidgetContainer("container2");
 container->Show(!container->IsVisible());
 }
-bool sortfunc(Widget* i,Widget* j) 
+bool sortfunc(std::shared_ptr<Widget> i,shared_ptr<Widget>  j) 
 { 
 	if (i->GetOrder()<j->GetOrder())
 		return true;
@@ -94,7 +95,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 {
 
 
-	hge =  hgeCreate(HGE_VERSION);
+	hge = hgeCreate(HGE_VERSION);
 	
 	hge->System_SetState(HGE_FRAMEFUNC, FrameFunc);
 	hge->System_SetState(HGE_RENDERFUNC, RenderFunc);
@@ -126,39 +127,38 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		quad.v[3].x=0; quad.v[3].y=600; 
 
 		// Load texture
-		
+		std::vector<HTEXTURE> textures;
 		str = path + std::string("\\btnpop.png");
-		HTEXTURE btnpoptex=hge->Texture_Load(str.c_str());
+		textures.push_back(hge->Texture_Load(str.c_str()));
 		str = path + std::string("\\btnpush.png");
-		HTEXTURE btnpushtex=hge->Texture_Load(str.c_str());
+		textures.push_back(hge->Texture_Load(str.c_str()));
 		
 		wcont = make_shared<WidgetContainer> (WidgetContainer());
 				
-		WidgetBtn* btn = new WidgetBtn(100.,100.,140.,24.,"btn1",7,TRUE,btnpushtex, btnpoptex);
+		std::shared_ptr<Widget> btn( new WidgetBtn(100.,100.,140.,24.,"btn1",7,TRUE,textures[1], textures[0]));
 		btn->AddEventHandler(MSG_BTNCLICK, OnMouseClick);
 		wcont->AddWidget(btn); 
-
 		str = path + std::string("\\img1.png");
-		HTEXTURE teximg1=hge->Texture_Load(str.c_str());
-		WidgetImg *img = new WidgetImg(100.,200.,201.,126.,"img1",1,TRUE,teximg1);
+		textures.push_back(hge->Texture_Load(str.c_str()));
+		std::shared_ptr<Widget> img(new WidgetImg(100.,200.,201.,126.,"img1",1,TRUE,textures[2]));
 		img->AddEventHandler(MSG_MOUSEENTER, OnMouseEnter);
 		img->AddEventHandler(MSG_MOUSELEAVE, OnMouseLeave);
 		wcont->AddWidget(img);
 
 		str = path + std::string("\\img2.png");
-		HTEXTURE teximg2=hge->Texture_Load(str.c_str());
-		wcont->AddWidget(new WidgetImg(100.,200.,201.,126.,"img2",5,FALSE,teximg2));
+		textures.push_back(hge->Texture_Load(str.c_str()));
+		wcont->AddWidget(std::shared_ptr<Widget>(new WidgetImg(100.,200.,201.,126.,"img2",5,FALSE,textures[3])));
 		wcont->Show(true);
-		WidgetContainer* wcont2 = new WidgetContainer();
-		wcont2->AddWidget(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,btnpushtex, btnpoptex));
-		wcont2->AddWidget(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,teximg1));
+		std::shared_ptr<WidgetContainer> wcont2(new WidgetContainer());
+		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,textures[1], textures[0])));
+		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,textures[2])));
 		wcont2->Show(false);
 		wcont->AddWidgetCont("container2", wcont2);
 
 		str = path + std::string("\\cursor.png");
 		curs=hge->Texture_Load(str.c_str());
 	
-		sprcurs= new hgeSprite(curs,0,0,32,32);
+		sprcurs= std::shared_ptr<hgeSprite>( new hgeSprite(curs,0,0,32,32));
 	
 		//sort render vector
 		std::sort(renderVect.begin(), renderVect.end(),sortfunc);
@@ -166,10 +166,10 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		hge->System_Start();
 
 		// Delete created objects and free loaded resources
-		
+		for(auto i = textures.begin(); i!=textures.end();i++)
+			hge->Texture_Free(*i);
 		hge->Texture_Free(curs);
 		hge->Texture_Free(quad.tex);
-		delete sprcurs;
 		//delete wcont;
 	}
 	hge->System_Shutdown();

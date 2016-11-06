@@ -23,40 +23,36 @@ void WidgetContainer::Render()
 {
 	for(int i =0;i< renderVect.size();i++)
 		renderVect[i]->Render();
-	/*for (auto i = widgetsMap.begin(); i!=widgetsMap.end();i++)
-		i->second->Render();
-	for (auto i = widgetsContMap.begin(); i!=widgetsContMap.end();i++)
-		i->second->Render();
-		*/
+
 }
-void WidgetContainer::AddWidget(Widget* v)
+
+void WidgetContainer::AddWidget(std::shared_ptr<Widget> v)
 {
-	v->SetWidgetContainer( this);
+	v->SetWidgetContainer(this);
+	renderVect.push_back(v);
 	widgetsMap[v->GetId()] = v;
 }
-void WidgetContainer::AddWidgetCont(std::string id, WidgetContainer* pWc)
+void WidgetContainer::AddWidgetCont(std::string id, std::shared_ptr<WidgetContainer> pWc)
 {
 	widgetsContMap[id] = pWc;
 }
-
-Widget*  WidgetContainer::GetWidget(std::string id)
+std::shared_ptr<Widget>  WidgetContainer::GetWidget(std::string id)
 {
 	auto i = widgetsMap.find(id);
 	if(i!=widgetsMap.end())
 		return widgetsMap[id];
 	else
-		return NULL;
+		return nullptr;
 }
-WidgetContainer* WidgetContainer::GetWidgetContainer(std::string id) 
+std::shared_ptr<WidgetContainer> WidgetContainer::GetWidgetContainer(std::string id) 
 {
 	auto i = widgetsContMap.find(id);
 	if(i!=widgetsContMap.end())
 		return widgetsContMap[id];
 	else
-		return NULL;
+		return nullptr;
 }
 WidgetContainer::~WidgetContainer(void)
 {
-	for(auto i = widgetsContMap.begin();i!= widgetsContMap.end(); i++)
-		delete i->second;
+	
 }
