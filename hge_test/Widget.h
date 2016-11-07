@@ -6,7 +6,7 @@
 #include <hgegui.h>
 #include <memory>
 #include <string>
-
+//messages for callback
 #define MSG_BTNCLICK 1
 #define MSG_MOUSEENTER 2
 #define MSG_MOUSELEAVE 3
@@ -42,26 +42,26 @@ public:
 	Widget(void){};
 	virtual ~Widget(void);
 
-	void SetId(const std::string & id_); // установить строковый идентификатор 
+	void SetId(const std::string & id_); // add string id 
 	std::string GetId();
-	void SetOrder(int order_); // для изменения порядка отрисовки виджетов на экране (аппаратный z-order не используется)
+	void SetOrder(int order_); // change sort order
 	int GetOrder();
 	int GetCreateID();
 	bool IsVisible();
 	std::map<int,std::function<void(Widget* )>> *GetEvents();
-	void SetPos(float x, float y); // положение виджета
-	void SetSize(float w, float h); // размер виджета. Предполагается что все виджеты – прямоугольники
+	void SetPos(float x, float y); // position widget
+	void SetSize(float w, float h); // widget size
 	bool MouseInBox();
 	virtual bool	MouseLButton(bool bDown);
 	virtual void	MouseOver(bool bOver);
-	virtual void Update(float dt); // обновление состояни виджета
-	virtual void Render(void); // отрисовка виджета
+	virtual void Update(float dt); // update widget
+	virtual void Render(void); // draw widget
 	WidgetContainer* GetWidgetContainer();
 	std::shared_ptr<hgeSprite> GetSprite();
 	void SetWidgetContainer(WidgetContainer* w);
-	void Show(); // показать виджет
-	void Hide(); // скрыть виджет
-	void AddEventHandler(int hdr,std::function<void(Widget* )> func); // регистрация фунций обратного вызова для различных союбытий виджета. 
+	void Show(); // show widget
+	void Hide(); // hide widget
+	void AddEventHandler(int hdr,std::function<void(Widget* )> func); // register callback functions
 	
 
 };

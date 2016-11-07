@@ -26,7 +26,6 @@ std::shared_ptr<hgeSprite>		sprcurs;
 HTEXTURE			curs;
 hgeQuad				quad;
 shared_ptr<WidgetContainer> wcont;   
-//std::vector<Widget*> renderVect;
 std::vector<shared_ptr<Widget>> renderVect;
 
 int push = 0;
@@ -170,7 +169,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 			hge->Texture_Free(*i);
 		hge->Texture_Free(curs);
 		hge->Texture_Free(quad.tex);
-		//delete wcont;
 	}
 	hge->System_Shutdown();
 	hge->Release();
