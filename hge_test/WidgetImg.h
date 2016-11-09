@@ -4,18 +4,14 @@ class WidgetImg : public Widget
 {
 	HTEXTURE imgTex;
 public:
-	WidgetImg(float _x, 
-		   float _y, 
-		   float _width, 
-		   float _height, 
-		   std::string _id, 
-		   int _order, 
-		   bool visibl,
-		   HTEXTURE _imgTex);
+	WidgetImg(Position pos, 
+		   Size size, 
+		   std::string id, 
+		   int order, 
+		   bool visible,
+		   HTEXTURE imgTex);
 	
-	//virtual void	MouseOver(bool bOver);
-
 	WidgetImg(void);
-	virtual ~WidgetImg(void);
+	virtual ~WidgetImg(void){};
 };
 

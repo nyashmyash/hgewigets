@@ -1,16 +1,14 @@
 #include "stdafx.h"
 #include "WidgetBtn.h"
-#include "hge_test.h"
+#include "WidgetContainer.h"
 
-WidgetBtn::WidgetBtn(float _fX, 
-		   float _fY, 
-		   float _fWidth, 
-		   float _fHeight, 
-		   std::string _sId, 
-		   int _iOrder, 
-		   bool _bVisibl,
-		   HTEXTURE _hPushTex,
-		   HTEXTURE _hPopTex): Widget(_fX,_fY,_fWidth,_fHeight,_sId,_iOrder,_bVisibl), pushTex(_hPushTex), popTex(_hPopTex)
+WidgetBtn::WidgetBtn(Position pos,
+		   Size size, 
+		   std::string id, 
+		   int order, 
+		   bool visible,
+		   HTEXTURE pushTex,
+		   HTEXTURE popTex): Widget(pos,size,id,order,visible), pushTex(pushTex), popTex(popTex)
 { 
 	click = 0;
 	GetSprite()->SetTexture(popTex);
@@ -38,8 +36,8 @@ bool WidgetBtn::MouseLButton(bool bDown)
 			if(MouseInBox())
 			{
 				GetSprite()->SetTexture(popTex);	
-				if (click &&GetEvents()->find(MSG_BTNCLICK)!=GetEvents()->end())
-					(*GetEvents())[MSG_BTNCLICK](this);
+				if (click &&GetEvents().find(MSG_BTNCLICK)!=GetEvents().end())
+					(GetEvents())[MSG_BTNCLICK](this);
 				click = 0;
 			}
 		}
@@ -47,10 +45,4 @@ bool WidgetBtn::MouseLButton(bool bDown)
 		
 	}
 	return true;
-}
-
-//delete textures
-WidgetBtn::~WidgetBtn(void)
-{
-
 }

@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "hge_test.h"
 
-
 #include <string>
 
 using namespace std;
@@ -16,10 +15,11 @@ using namespace std;
 #define MAX_LOADSTRING 100
 
 
+
 // Pointers to the HGE objects we will use
 HGE *hge;
 //
-float mx, my;
+Position mousePos;
 bool mouse_down = false;
 std::shared_ptr<hgeSprite>		sprcurs;
 
@@ -34,7 +34,7 @@ bool FrameFunc()
 {
 	if (hge->Input_GetKeyState(HGEK_ESCAPE)) return true;
 	mouse_down = hge->Input_GetKeyState(HGEK_LBUTTON);
-	hge->Input_GetMousePos(&mx, &my);
+	hge->Input_GetMousePos(&mousePos.x, &mousePos.y);
 	wcont->Update(0);
 	float dt=hge->Timer_GetDelta();
 	static float t=0.0f;
@@ -57,7 +57,7 @@ bool RenderFunc()
 	hge->Gfx_Clear(0);
 	hge->Gfx_RenderQuad(&quad);
 	wcont->Render();
-	if(hge->Input_IsMouseOver() && sprcurs) sprcurs->Render(mx,my);
+	if(hge->Input_IsMouseOver() && sprcurs) sprcurs->Render(mousePos.x,mousePos.y);
 	hge->Gfx_EndScene();
 
 	return false;
@@ -66,10 +66,12 @@ bool RenderFunc()
 void OnMouseEnter(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Show();
+ // widget->Hide();
 }
 void OnMouseLeave(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Hide();
+ // widget->Show();
 }
 void OnMouseClick(Widget*  widget)
 {
@@ -134,23 +136,23 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 		
 		wcont = make_shared<WidgetContainer> (WidgetContainer());
 				
-		std::shared_ptr<Widget> btn( new WidgetBtn(100.,100.,140.,24.,"btn1",7,TRUE,textures[1], textures[0]));
+		std::shared_ptr<Widget> btn( new WidgetBtn(Position(100.,100.), Size(140.,24.),"btn1",7,TRUE,textures[1], textures[0]));
 		btn->AddEventHandler(MSG_BTNCLICK, OnMouseClick);
 		wcont->AddWidget(btn); 
 		str = path + std::string("\\img1.png");
 		textures.push_back(hge->Texture_Load(str.c_str()));
-		std::shared_ptr<Widget> img(new WidgetImg(100.,200.,201.,126.,"img1",1,TRUE,textures[2]));
+		std::shared_ptr<Widget> img(new WidgetImg(Position(100.,200.),Size(201.,126.),"img1",1,TRUE,textures[2]));
 		img->AddEventHandler(MSG_MOUSEENTER, OnMouseEnter);
 		img->AddEventHandler(MSG_MOUSELEAVE, OnMouseLeave);
 		wcont->AddWidget(img);
 
 		str = path + std::string("\\img2.png");
 		textures.push_back(hge->Texture_Load(str.c_str()));
-		wcont->AddWidget(std::shared_ptr<Widget>(new WidgetImg(100.,200.,201.,126.,"img2",5,FALSE,textures[3])));
+		wcont->AddWidget(std::shared_ptr<Widget>(new WidgetImg(Position(100.,200.),Size(201.,126.),"img2",5,FALSE,textures[3])));
 		wcont->Show(true);
 		std::shared_ptr<WidgetContainer> wcont2(new WidgetContainer());
-		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetBtn(350.,100.,140.,24.,"btnz",5,TRUE,textures[1], textures[0])));
-		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetImg(350.,200.,201.,126.,"imgz1",2,TRUE,textures[2])));
+		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetBtn(Position(350.,100.),Size(140.,24.),"btnz",5,TRUE,textures[1], textures[0])));
+		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetImg(Position(350.,200.),Size(201.,126.),"imgz1",2,TRUE,textures[3])));
 		wcont2->Show(false);
 		wcont->AddWidgetCont("container2", wcont2);
 

@@ -2,30 +2,28 @@
 #include "Widget.h"
 #include "hge_test.h"
 
-Widget::Widget(float _x, 
-		   float _y, 
-		   float _width, 
-		   float _height, 
-		   std::string _id, 
-		   int _order, 
-		   bool visibl): posX(_x), posY(_y), width(_width), height(_height), id_s(_id), order(_order), visible(visibl)
+Widget::Widget(Position pos,
+		   Size size, 
+		   std::string id, 
+		   int order, 
+		   bool visible): pos(pos), size(size), id_s(id), order(order), visible(visible)
 
 {
 	statcreat ++;
 	idcreate = statcreat;
 	mouse_entered = false; 
-	pSprBtn	= std::shared_ptr<hgeSprite>( new hgeSprite(NULL, 0,0,_width, _height));
+	pSprBtn	= std::shared_ptr<hgeSprite>( new hgeSprite(NULL, 0,0,size.width, size.height));
 }
 bool Widget::MouseInBox()
 {
-	if (mx>posX && my>posY && mx<posX+pSprBtn->GetWidth() && my<posY+pSprBtn->GetHeight())
-	{return true;}
+	if (mousePos.x>pos.x && mousePos.y>pos.y && mousePos.x<pos.x+pSprBtn->GetWidth() && mousePos.y<pos.y+pSprBtn->GetHeight())
+		return true;
 	else
-	{return false;}		
+		return false;		
 }
-std::map<int,std::function<void(Widget *)>> * Widget::GetEvents()
+std::map<int,std::function<void(Widget *)>> &Widget::GetEvents()
 {
-	return &events;
+	return events;
 }
 Widget::~Widget(void)
 {
@@ -67,16 +65,16 @@ WidgetContainer* Widget::GetWidgetContainer()
 {
    return pWidgetCont;
 }
-void Widget::SetPos(float fX, float fY)
+void Widget::SetPos(float x, float y)
 {
-	posX = fX;
-	posY = fY;
+	pos.x = x;
+	pos.y = y;
 }
 
-void Widget::SetSize(float fWidth, float fHeight)
+void Widget::SetSize(float width, float height)
 {
-	width = fWidth;
-	height = fHeight;
+	size.width = width;
+	size.height = height;
 }
 
 bool Widget::MouseLButton(bool bDown)
@@ -112,7 +110,7 @@ void Widget::Update(float dt)
 void Widget::Render(void)
 {
 	if (visible && pWidgetCont->IsVisible())
-		GetSprite()->Render(posX,posY);
+		GetSprite()->Render(pos.x,pos.y);
 }
 void Widget::Show()
 {

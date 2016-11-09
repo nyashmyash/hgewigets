@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "WidgetContainer.h"
+
 WidgetContainer::WidgetContainer(void)
 {
 }
-void WidgetContainer::Show(bool _visibl)
+void WidgetContainer::Show(bool visible)
 {
-	visibl = _visibl;
+	this->visible = visible;
 }
 bool WidgetContainer::IsVisible()
 {
-	return visibl;
+	return visible;
 }
 void WidgetContainer::Update(float df)
 {
@@ -40,7 +41,7 @@ std::shared_ptr<Widget>  WidgetContainer::GetWidget(std::string id)
 {
 	auto i = widgetsMap.find(id);
 	if(i!=widgetsMap.end())
-		return widgetsMap[id];
+		return i->second;
 	else
 		return nullptr;
 }
@@ -48,11 +49,8 @@ std::shared_ptr<WidgetContainer> WidgetContainer::GetWidgetContainer(std::string
 {
 	auto i = widgetsContMap.find(id);
 	if(i!=widgetsContMap.end())
-		return widgetsContMap[id];
+		return i->second;
 	else
 		return nullptr;
 }
-WidgetContainer::~WidgetContainer(void)
-{
-	
-}
+

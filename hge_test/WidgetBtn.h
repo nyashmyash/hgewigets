@@ -6,18 +6,16 @@ class WidgetBtn : public Widget
 	HTEXTURE popTex;
 	int click;
 public:
-	WidgetBtn(float _x, 
-		   float _y, 
-		   float _width, 
-		   float _height, 
-		   std::string _id, 
-		   int _order, 
-		   bool visibl,
-		   HTEXTURE _pushTex,
-		   HTEXTURE _popTex);
+	WidgetBtn(Position pos,
+		   Size size, 
+		   std::string id, 
+		   int order, 
+		   bool visible,
+		   HTEXTURE pushTex,
+		   HTEXTURE popTex);
 	WidgetBtn(void);
 	virtual bool MouseLButton(bool bDown);
 
-	virtual ~WidgetBtn(void);
+	virtual ~WidgetBtn(void) {};
 };
 

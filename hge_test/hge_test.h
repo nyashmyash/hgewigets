@@ -14,7 +14,7 @@
 
 // Global Variables:
 extern HGE* hge;
-extern float mx, my;
+extern Position mousePos;
 extern bool mouse_down;
-//extern std::vector<Widget*> renderVect;
 extern std::vector<std::shared_ptr<Widget>> renderVect;
+
