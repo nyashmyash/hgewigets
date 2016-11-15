@@ -72,7 +72,7 @@ private:
 	bool visible;
 	bool mouse_entered;
 	std::map<int,std::function<void(Widget* )>> events;
-	WidgetContainer* pWidgetCont;
+	std::weak_ptr<WidgetContainer> pWidgetCont;
 private:
 	//Widget(const Widget &) = delete;
 	//void operator =(const Widget &) = delete;
@@ -100,9 +100,9 @@ public:
 	virtual void	MouseOver(bool bOver);
 	virtual void Update(float dt); // update widget
 	virtual void Render(void); // draw widget
-	WidgetContainer* GetWidgetContainer();
+	std::shared_ptr<WidgetContainer> GetWidgetContainer();
 	std::shared_ptr<hgeSprite> GetSprite();
-	void SetWidgetContainer(WidgetContainer* w);
+	void SetWidgetContainer(std::weak_ptr<WidgetContainer> w);
 	void Show(); // show widget
 	void Hide(); // hide widget
 	void AddEventHandler(int hdr,std::function<void(Widget* )> func); // register callback functions

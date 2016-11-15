@@ -106,6 +106,17 @@
     <ClCompile Include="WidgetContainer.cpp" />
     <ClCompile Include="WidgetImg.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resource\bg.png" />
+    <Image Include="Resource\btnpop.png" />
+    <Image Include="Resource\btnpush.png" />
+    <Image Include="Resource\cursor.png" />
+    <Image Include="Resource\img1.png" />
+    <Image Include="Resource\img2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\hge.dll" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

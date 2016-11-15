@@ -63,4 +63,29 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resource\bg.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\btnpop.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\btnpush.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\cursor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\img1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Resource\img2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resource\hge.dll">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

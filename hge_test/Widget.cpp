@@ -29,9 +29,9 @@ Widget::~Widget(void)
 {
 	
 }
-void Widget::SetWidgetContainer(WidgetContainer* pwCont)
+void Widget::SetWidgetContainer(std::weak_ptr<WidgetContainer> pCont)
 {
-   pWidgetCont = pwCont;
+   pWidgetCont = pCont;
 }
 void Widget::SetId(const std::string & sId)
 {
@@ -41,9 +41,9 @@ std::string  Widget::GetId()
 {
 	return id_s;
 }
-void Widget::SetOrder(int iOrder)
+void Widget::SetOrder(int order)
 {
-	order = iOrder;
+	this->order = order;
 }
 std::shared_ptr<hgeSprite>Widget::GetSprite()
 {
@@ -61,9 +61,9 @@ int Widget::GetCreateID()
 {
 	return idcreate;
 }
-WidgetContainer* Widget::GetWidgetContainer()
+std::shared_ptr<WidgetContainer> Widget::GetWidgetContainer()
 {
-   return pWidgetCont;
+	return pWidgetCont.lock();
 }
 void Widget::SetPos(float x, float y)
 {
@@ -109,7 +109,7 @@ void Widget::Update(float dt)
 
 void Widget::Render(void)
 {
-	if (visible && pWidgetCont->IsVisible())
+	if (visible && pWidgetCont.lock()->IsVisible())
 		GetSprite()->Render(pos.x,pos.y);
 }
 void Widget::Show()

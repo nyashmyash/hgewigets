@@ -66,12 +66,10 @@ bool RenderFunc()
 void OnMouseEnter(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Show();
- // widget->Hide();
 }
 void OnMouseLeave(Widget*  widget)
 {
   widget->GetWidgetContainer()->GetWidget("img2")->Hide();
- // widget->Show();
 }
 void OnMouseClick(Widget*  widget)
 {
@@ -106,11 +104,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	hge->System_SetState(HGE_SCREENBPP, 32);
 
 	if(hge->System_Initiate()) {
-		char path[100];
-		std::string str;
-		GetCurrentDirectoryA(100, path);
-		str =path + std::string("\\bg.png");
-		quad.tex=hge->Texture_Load(str.c_str());
+		quad.tex=hge->Texture_Load("bg.png");
 		// Set up the quad we will use for background animation
 		quad.blend=BLEND_ALPHABLEND | BLEND_COLORMUL | BLEND_NOZWRITE;
 
@@ -129,37 +123,31 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 		// Load texture
 		std::vector<HTEXTURE> textures;
-		str = path + std::string("\\btnpop.png");
-		textures.push_back(hge->Texture_Load(str.c_str()));
-		str = path + std::string("\\btnpush.png");
-		textures.push_back(hge->Texture_Load(str.c_str()));
+		textures.push_back(hge->Texture_Load("btnpop.png"));
+		textures.push_back(hge->Texture_Load("btnpush.png"));
 		
 		wcont = make_shared<WidgetContainer> (WidgetContainer());
 				
-		std::shared_ptr<Widget> btn( new WidgetBtn(Position(100.,100.), Size(140.,24.),"btn1",7,TRUE,textures[1], textures[0]));
+		auto btn = std::make_shared<WidgetBtn>( WidgetBtn(Position(100.,100.), Size(140.,24.),"btn1",7,TRUE,textures[1], textures[0]));
 		btn->AddEventHandler(MSG_BTNCLICK, OnMouseClick);
-		wcont->AddWidget(btn); 
-		str = path + std::string("\\img1.png");
-		textures.push_back(hge->Texture_Load(str.c_str()));
-		std::shared_ptr<Widget> img(new WidgetImg(Position(100.,200.),Size(201.,126.),"img1",1,TRUE,textures[2]));
+		wcont->AddWidget(btn, wcont); 
+		textures.push_back(hge->Texture_Load("img1.png"));
+		auto img = std::make_shared<Widget>(WidgetImg(Position(100.,200.),Size(201.,126.),"img1",1,TRUE,textures[2]));
 		img->AddEventHandler(MSG_MOUSEENTER, OnMouseEnter);
 		img->AddEventHandler(MSG_MOUSELEAVE, OnMouseLeave);
-		wcont->AddWidget(img);
+		wcont->AddWidget(img, wcont);
 
-		str = path + std::string("\\img2.png");
-		textures.push_back(hge->Texture_Load(str.c_str()));
-		wcont->AddWidget(std::shared_ptr<Widget>(new WidgetImg(Position(100.,200.),Size(201.,126.),"img2",5,FALSE,textures[3])));
+		textures.push_back(hge->Texture_Load("img2.png"));
+		wcont->AddWidget(std::make_shared<Widget>(WidgetImg(Position(100.,200.),Size(201.,126.),"img2",5,FALSE,textures[3])), wcont);
 		wcont->Show(true);
-		std::shared_ptr<WidgetContainer> wcont2(new WidgetContainer());
-		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetBtn(Position(350.,100.),Size(140.,24.),"btnz",5,TRUE,textures[1], textures[0])));
-		wcont2->AddWidget(std::shared_ptr<Widget>(new WidgetImg(Position(350.,200.),Size(201.,126.),"imgz1",2,TRUE,textures[3])));
+		auto wcont2 = std::make_shared<WidgetContainer> (WidgetContainer());
+		wcont2->AddWidget(std::make_shared<Widget>(WidgetBtn(Position(350.,100.),Size(140.,24.),"btnz",5,TRUE,textures[1], textures[0])), wcont2);
+		wcont2->AddWidget(std::make_shared<Widget>(WidgetImg(Position(350.,200.),Size(201.,126.),"imgz1",2,TRUE,textures[3])), wcont2);
 		wcont2->Show(false);
 		wcont->AddWidgetCont("container2", wcont2);
-
-		str = path + std::string("\\cursor.png");
-		curs=hge->Texture_Load(str.c_str());
+		curs=hge->Texture_Load("cursor.png");
 	
-		sprcurs= std::shared_ptr<hgeSprite>( new hgeSprite(curs,0,0,32,32));
+		sprcurs= std::make_shared<hgeSprite>(hgeSprite(curs,0,0,32,32));
 	
 		//sort render vector
 		std::sort(renderVect.begin(), renderVect.end(),sortfunc);

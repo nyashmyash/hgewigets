@@ -27,11 +27,11 @@ void WidgetContainer::Render()
 
 }
 
-void WidgetContainer::AddWidget(std::shared_ptr<Widget> v)
+void WidgetContainer::AddWidget(std::shared_ptr<Widget> widg, std::shared_ptr<WidgetContainer> wcont)
 {
-	v->SetWidgetContainer(this);
-	renderVect.push_back(v);
-	widgetsMap[v->GetId()] = v;
+	widg->SetWidgetContainer(std::weak_ptr<WidgetContainer>(wcont));
+	renderVect.push_back(widg);
+	widgetsMap[widg->GetId()] = widg;
 }
 void WidgetContainer::AddWidgetCont(std::string id, std::shared_ptr<WidgetContainer> pWc)
 {

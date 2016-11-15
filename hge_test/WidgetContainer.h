@@ -10,7 +10,7 @@ private:
 	std::map<std::string,std::shared_ptr<Widget> > widgetsMap; //widgets in container
 	std::map<std::string,std::shared_ptr<WidgetContainer> > widgetsContMap; //other containers
 public:
-	void AddWidget(std::shared_ptr<Widget> v);
+	void AddWidget(std::shared_ptr<Widget> widg, std::shared_ptr<WidgetContainer> wcont);
 	void AddWidgetCont(std::string id, std::shared_ptr<WidgetContainer> pWc);
 	std::shared_ptr<Widget>  GetWidget(std::string id);
 	std::shared_ptr<WidgetContainer>  GetWidgetContainer(std::string id);
